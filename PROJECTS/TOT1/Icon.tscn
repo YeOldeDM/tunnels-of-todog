@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/gfx/player/base/halfling_male.png" type="Texture" id=1]
+
+[node name="Icon" type="Sprite"]
+texture = ExtResource( 1 )
+centered = false
+

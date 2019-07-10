@@ -1,0 +1,139 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://dungeon/Dungeon.gd" type="Script" id=1]
+[ext_resource path="res://dungeon/Dungeon.tres" type="TileSet" id=2]
+[ext_resource path="res://assets/gfx/tiles/vis_tiles.png" type="Texture" id=3]
+
+[sub_resource type="TileSet" id=1]
+0/name = "vis_tiles.png 0"
+0/texture = ExtResource( 3 )
+0/tex_offset = Vector2( 0, 0 )
+0/modulate = Color( 1, 1, 1, 1 )
+0/region = Rect2( 0, 0, 32, 32 )
+0/tile_mode = 2
+0/autotile/icon_coordinate = Vector2( 0, 0 )
+0/autotile/tile_size = Vector2( 32, 32 )
+0/autotile/spacing = 0
+0/autotile/occluder_map = [  ]
+0/autotile/navpoly_map = [  ]
+0/autotile/z_index_map = [  ]
+0/occluder_offset = Vector2( 0, 0 )
+0/navigation_offset = Vector2( 0, 0 )
+0/shapes = [  ]
+0/z_index = 0
+1/name = "vis_tiles.png 1"
+1/texture = ExtResource( 3 )
+1/tex_offset = Vector2( 0, 0 )
+1/modulate = Color( 1, 1, 1, 1 )
+1/region = Rect2( 32, 0, 32, 32 )
+1/tile_mode = 2
+1/autotile/icon_coordinate = Vector2( 0, 0 )
+1/autotile/tile_size = Vector2( 32, 32 )
+1/autotile/spacing = 0
+1/autotile/occluder_map = [  ]
+1/autotile/navpoly_map = [  ]
+1/autotile/z_index_map = [  ]
+1/occluder_offset = Vector2( 0, 0 )
+1/navigation_offset = Vector2( 0, 0 )
+1/shapes = [  ]
+1/z_index = 0
+
+[sub_resource type="StyleBoxFlat" id=2]
+content_margin_left = 8.0
+content_margin_right = 8.0
+content_margin_top = 4.0
+content_margin_bottom = 4.0
+bg_color = Color( 0, 0, 0, 1 )
+border_width_left = 2
+border_width_top = 1
+border_width_right = 2
+border_width_bottom = 1
+corner_detail = 1
+
+[node name="Dungeon" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="FloorMap" type="TileMap" parent="."]
+tile_set = ExtResource( 2 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="VisMap" type="TileMap" parent="."]
+tile_set = SubResource( 1 )
+cell_size = Vector2( 32, 32 )
+format = 1
+
+[node name="UI" type="CanvasLayer" parent="."]
+editor/display_folded = true
+
+[node name="Top" type="PanelContainer" parent="UI"]
+margin_right = 800.0
+margin_bottom = 64.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Box" type="HBoxContainer" parent="UI/Top"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 792.0
+margin_bottom = 60.0
+
+[node name="Output" type="RichTextLabel" parent="UI/Top/Box"]
+margin_right = 520.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+scroll_active = false
+scroll_following = true
+
+[node name="Info" type="VBoxContainer" parent="UI/Top/Box"]
+margin_left = 524.0
+margin_right = 784.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Location" type="Label" parent="UI/Top/Box/Info"]
+margin_right = 260.0
+margin_bottom = 31.0
+size_flags_horizontal = 3
+size_flags_vertical = 6
+text = "Tunnels of Todog
+L1"
+align = 2
+valign = 1
+
+[node name="DateTime" type="Label" parent="UI/Top/Box/Info"]
+margin_top = 38.0
+margin_right = 260.0
+margin_bottom = 52.0
+size_flags_vertical = 6
+text = "00:00:00:00"
+align = 2
+valign = 1
+
+[node name="Bottom" type="PanelContainer" parent="UI"]
+margin_top = 480.0
+margin_right = 800.0
+margin_bottom = 544.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="Box" type="HBoxContainer" parent="UI/Bottom"]
+margin_left = 8.0
+margin_top = 4.0
+margin_right = 792.0
+margin_bottom = 60.0
+
+[node name="Left" type="VBoxContainer" parent="UI/Bottom/Box"]
+margin_right = 390.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Right" type="VBoxContainer" parent="UI/Bottom/Box"]
+margin_left = 394.0
+margin_right = 784.0
+margin_bottom = 56.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
