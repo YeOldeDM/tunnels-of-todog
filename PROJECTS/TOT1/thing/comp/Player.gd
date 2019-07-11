@@ -23,3 +23,6 @@ func _input(event)->void:
 			P.step( Vector2( -1, 0 ) )
 		if event.is_action("ui_right"):
 			P.step( Vector2( 1, 0 ) )
+
+		if event.is_action("step_ne"):
+			P.step( Vector2( 1, -1 ) )
