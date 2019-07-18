@@ -7,10 +7,12 @@ Test thouroughly, boi
 
 
 # Generate the Datamap
-func Generate( map_size=Vector2(65,50), room_count=20, room_size=Vector2(5,9), wall_id=1, floor_id=0 ):
+func Generate( map_size=Vector2(65,50), room_count=50, room_size=Vector2(3,12), wall_id=1, floor_id=0, use_seed=null ):
 	
-	# Randomize
-	randomize()
+	if use_seed:
+		seed( use_seed )
+	else:
+		randomize()
 	
 	# initialize data
 	var map = []

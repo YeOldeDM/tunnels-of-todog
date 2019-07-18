@@ -3,5 +3,7 @@
 [ext_resource path="res://thing/Thing.gd" type="Script" id=1]
 
 [node name="Thing" type="Sprite"]
+z_as_relative = false
+centered = false
 script = ExtResource( 1 )
 

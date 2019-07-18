@@ -1,6 +1,7 @@
 extends Node2D
 
 
+onready var DATABASE = preload("res://global/DATABASE.tscn").instance()
 
 onready var map = $FloorMap
 onready var fog = $FogMap
@@ -43,6 +44,10 @@ func spawn_player( at_pos:Vector2 = Vector2() )->void:
 	player.seen = true
 
 
+func paint_dungeon( mapdata ):
+	for x in mapdata.size():
+		for y in mapdata[x].size():
+			map.set_cell( x, y, mapdata[x][y] )
 
 
 
@@ -51,11 +56,17 @@ func spawn_player( at_pos:Vector2 = Vector2() )->void:
 
 
 func _ready():
+	RPG.MAP_DATA = FLOORGEN.Generate()
+	paint_dungeon( RPG.MAP_DATA.map )
+	
 	spawn_player( Vector2( 12,8 ) )
 	
-
-
-
+#	var ap = create_thing("Item/Apple")
+#	map.add_child(ap)
+#	ap.cell = Vector2( 14,7 )
+#
+#	for t in things:
+#		prints( t.Name, t.object_layer )
 
 # Signal Callbacks
 

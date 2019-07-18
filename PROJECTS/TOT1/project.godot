@@ -15,14 +15,14 @@ _global_script_class_icons={
 
 [application]
 
-config/name="ToT Step 1"
+config/name="Tunnels of Todog"
 run/main_scene="res://game/Game.tscn"
-config/icon="res://icon.png"
+config/icon="res://assets/gfx/icon.png"
 
 [autoload]
 
 RPG="*res://global/RPG.gd"
-DATABASE="*res://global/DATABASE.tscn"
+FLOORGEN="*res://global/FLOORGEN.gd"
 
 [display]
 
@@ -71,4 +71,5 @@ step_ne={
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0, 0, 0, 1 )
 environment/default_environment="res://default_env.tres"

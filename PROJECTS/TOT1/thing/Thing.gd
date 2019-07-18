@@ -46,7 +46,7 @@ var comp:Dictionary
 
 # Map Icon node representing this 
 # Thing may or may not exist
-var icon = null
+#var icon = null
 
 
 
@@ -76,11 +76,9 @@ export( int, FLAGS, \
 	"unique" \
 		 ) var flags
 
+export( int, "decal", "item", "entity" ) var object_layer #setget _set_object_layer
 
-# Base texture for the Thing
-# Most things just just use this one
-# ONLY set through editor
-export( Texture ) var _Icon # Private CamelSnake, BRUH!
+
 
 
 
@@ -96,7 +94,9 @@ func has_flag( F:int )->bool: #return the state of a property flag
 
 
 
-
+func can_step( cell ):
+	# Return true if this Thing can occupy a cell
+	return not RPG.map_check_for_solid( cell )
 
 
 # Move the Thing to an adjacent cell
@@ -112,7 +112,14 @@ func step( direction:Vector2 ):
 	direction.y = sign( direction.y )
 	
 	# just move the thing for now...
-	self.cell += direction
+	if can_step( cell ):
+		self.cell += direction
+
+
+
+
+func _ready():
+	self.z_index = self.object_layer
 
 
 
