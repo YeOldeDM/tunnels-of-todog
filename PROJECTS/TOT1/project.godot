@@ -23,6 +23,7 @@ config/icon="res://assets/gfx/icon.png"
 
 RPG="*res://global/RPG.gd"
 FLOORGEN="*res://global/FLOORGEN.gd"
+FOV="*res://global/FOV.gd"
 
 [display]
 

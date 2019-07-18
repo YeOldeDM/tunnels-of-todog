@@ -4,7 +4,7 @@ extends Sprite
 
 
 
-
+signal stepped( to_cell )
 
 
 """
@@ -102,7 +102,7 @@ func can_step( cell ):
 # Move the Thing to an adjacent cell
 # Should do object detection and return 
 # appropriate data. Also, it moves the
-# Thing if its legal :P
+# Thing if its legal 
 func step( direction:Vector2 ):
 	# Vector input to this should have 
 	# axis values of -1/0/1
@@ -112,9 +112,9 @@ func step( direction:Vector2 ):
 	direction.y = sign( direction.y )
 	
 	# just move the thing for now...
-	if can_step( cell ):
+	if can_step( cell + direction ):
 		self.cell += direction
-
+		emit_signal( "stepped", self.cell )
 
 
 
