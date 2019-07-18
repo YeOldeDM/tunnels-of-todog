@@ -15,14 +15,19 @@ func _ready():
 
 func _input(event)->void:
 	if 'pressed' in event and event.pressed:
-		if event.is_action("ui_up"):
+		if event.is_action("step_n"):
 			P.step( Vector2( 0, -1 ) )
-		if event.is_action("ui_down"):
-			P.step( Vector2( 0, 1 ) )
-		if event.is_action("ui_left"):
-			P.step( Vector2( -1, 0 ) )
-		if event.is_action("ui_right"):
-			P.step( Vector2( 1, 0 ) )
-
 		if event.is_action("step_ne"):
 			P.step( Vector2( 1, -1 ) )
+		if event.is_action("step_e"):
+			P.step( Vector2( 1, 0 ) )
+		if event.is_action("step_se"):
+			P.step( Vector2( 1, 1 ) )
+		if event.is_action("step_s"):
+			P.step( Vector2( 0, 1 ) )
+		if event.is_action("step_sw"):
+			P.step( Vector2( -1, 1 ) )
+		if event.is_action("step_w"):
+			P.step( Vector2( -1, 0 ) )
+		if event.is_action("step_nw"):
+			P.step( Vector2( -1, -1 ) )
