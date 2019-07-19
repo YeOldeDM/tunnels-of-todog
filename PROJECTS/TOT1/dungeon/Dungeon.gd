@@ -74,7 +74,7 @@ func _ready():
 # Signal Callbacks
 
 func _on_player_stepped( to_cell ):
-	var seen_cells = FOV.calculate_fov( RPG.MAP_DATA.map, 1, to_cell, 6 )
+	var seen_cells = FOV.calculate_fov( RPG.MAP_DATA.map, 1, to_cell, 5 )
 	for c in seen_cells:
 		fog.set_cellv( c, -1 )
 		explored_cells.append( c )
