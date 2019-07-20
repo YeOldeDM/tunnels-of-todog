@@ -1,5 +1,6 @@
 extends Node2D
 
+signal game_time_changed()
 
 onready var DATABASE = preload("res://global/DATABASE.tscn").instance()
 
@@ -11,6 +12,7 @@ onready var things = []	#Populated by Thing Node refs,
 
 
 var explored_cells = PoolVector2Array()
+var seen_cells = PoolVector2Array()
 
 	# PUBLIC FUNCS #
 
@@ -43,6 +45,7 @@ func spawn_player( at_pos:Vector2 = Vector2() )->Node:
 	
 	player.seen = true
 	player.connect( "stepped", self, "_on_player_stepped" )
+	player.comp["player"].connect( "player_acted", self, "_on_player_acted" )
 	return player
 
 func paint_dungeon( mapdata ):
@@ -55,26 +58,43 @@ func paint_dungeon( mapdata ):
 
 	# PRIVATE FUNCS #
 
-
+func _tick( delta ):
+	RPG.GAME_TIME += delta
+	print(RPG.GAME_TIME)
+	emit_signal("game_time_changed")
 
 func _ready():
 	RPG.MAP_DATA = FLOORGEN.Generate()
 	paint_dungeon( RPG.MAP_DATA.map )
 	
+	# Create Player
 	var p = spawn_player( Vector2( RPG.MAP_DATA.start_x, RPG.MAP_DATA.start_y ) )
-	p.emit_signal( "stepped", p.cell )
 	
-#	var ap = create_thing("Item/Apple")
-#	map.add_child(ap)
-#	ap.cell = Vector2( 14,7 )
-#
-#	for t in things:
-#		prints( t.Name, t.object_layer )
+	
+	# Create test Things
+	var ap = create_thing("Item/Apple")
+	map.add_child(ap)
+	ap.cell = p.cell
+	
+	var stairs = create_thing("DownStairs")
+	map.add_child(stairs)
+	stairs.cell = p.cell + Vector2(0,1)
+	
+	# Bootstrap initial FOV
+	p.emit_signal( "stepped", p.cell )
+
 
 # Signal Callbacks
 
+func _on_player_acted( action_idx ):
+	match action_idx:
+		HERO.ACTION.MOVE:
+			pass
+		HERO.ACTION.WAIT:
+			_tick( HERO.WAIT_TIME )
+
 func _on_player_stepped( to_cell ):
-	var seen_cells = FOV.calculate_fov( RPG.MAP_DATA.map, 1, to_cell, 5 )
+	seen_cells = FOV.calculate_fov( RPG.MAP_DATA.map, 1, to_cell, 5 )
 	for c in seen_cells:
 		fog.set_cellv( c, -1 )
 		explored_cells.append( c )
@@ -82,7 +102,10 @@ func _on_player_stepped( to_cell ):
 		if not c in seen_cells:
 			fog.set_cellv( c, 1 )
 	
+	for thing in get_tree().get_nodes_in_group("things"):
+		thing.seen = thing.cell in seen_cells
 	
+	_tick( HERO.MOVE_SPEED )
 	
 	
 	

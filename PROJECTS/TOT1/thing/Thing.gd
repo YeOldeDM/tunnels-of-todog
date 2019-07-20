@@ -94,7 +94,7 @@ func has_flag( F:int )->bool: #return the state of a property flag
 
 
 
-func can_step( cell ):
+func can_step( cell:Vector2 )->bool:
 	# Return true if this Thing can occupy a cell
 	return not RPG.map_check_for_solid( cell )
 
@@ -103,7 +103,7 @@ func can_step( cell ):
 # Should do object detection and return 
 # appropriate data. Also, it moves the
 # Thing if its legal 
-func step( direction:Vector2 ):
+func step( direction:Vector2 )->void:
 	# Vector input to this should have 
 	# axis values of -1/0/1
 	
@@ -118,7 +118,7 @@ func step( direction:Vector2 ):
 
 
 
-func _ready():
+func _ready()->void:
 	self.z_index = self.object_layer
 
 
@@ -130,10 +130,13 @@ func _set_cell(what:Vector2)->void:
 
 func _set_seen(what:bool)->void:
 	seen = what
+	self.visible = is_seen()
+	
+	if seen and not discovered:
+		discovered = true
 
 
-func _set_visible( what:bool ):
-	visible = what
+
 
 	
 	

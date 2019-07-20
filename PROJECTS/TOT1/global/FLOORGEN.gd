@@ -14,13 +14,13 @@ func Generate( map_size:Vector2=Vector2(65,50), room_count:int=50, \
 		randomize()
 	
 	# initialize data
-	var map:Array
-	var rooms:Array
+	var map=[]
+	var rooms=[]
 	var start_pos:Vector2
 	
 	# Populate map array
 	for x in range( map_size.x ):
-		var column:PoolIntArray
+		var column=[]
 		for y in range( map_size.y ):
 			column.append( wall_id )
 		map.append( column )

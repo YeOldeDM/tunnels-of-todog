@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://dungeon/Dungeon.gd" type="Script" id=1]
 [ext_resource path="res://dungeon/Dungeon.tres" type="TileSet" id=2]
 [ext_resource path="res://assets/gfx/tiles/vis_tiles.png" type="Texture" id=3]
+[ext_resource path="res://dungeon/UI.gd" type="Script" id=4]
+[ext_resource path="res://dungeon/DevTools.gd" type="Script" id=5]
 
 [sub_resource type="TileSet" id=1]
 0/name = "vis_tiles.png 0"
@@ -64,6 +66,7 @@ cell_size = Vector2( 32, 32 )
 format = 1
 
 [node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource( 4 )
 
 [node name="Top" type="PanelContainer" parent="UI"]
 editor/display_folded = true
@@ -83,6 +86,7 @@ margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 size_flags_stretch_ratio = 2.0
+bbcode_enabled = true
 scroll_active = false
 scroll_following = true
 
@@ -103,7 +107,7 @@ L1"
 align = 2
 valign = 1
 
-[node name="DateTime" type="Label" parent="UI/Top/Box/Info"]
+[node name="GameTime" type="Label" parent="UI/Top/Box/Info"]
 margin_top = 38.0
 margin_right = 260.0
 margin_bottom = 52.0
@@ -113,7 +117,6 @@ align = 2
 valign = 1
 
 [node name="Bottom" type="PanelContainer" parent="UI"]
-editor/display_folded = true
 margin_top = 480.0
 margin_right = 800.0
 margin_bottom = 544.0
@@ -144,7 +147,6 @@ margin_bottom = 32.0
 text = "Lv3 Gouman Knight"
 
 [node name="Middle" type="VBoxContainer" parent="UI/Bottom/Box"]
-editor/display_folded = true
 margin_left = 198.0
 margin_right = 586.0
 margin_bottom = 56.0
@@ -274,3 +276,49 @@ margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="DevTools" type="Button" parent="UI/Bottom/Box/Right"]
+margin_right = 71.0
+margin_bottom = 20.0
+size_flags_horizontal = 0
+text = "DevTools"
+
+[node name="DevTools" type="WindowDialog" parent="UI"]
+margin_left = 32.0
+margin_top = 96.0
+margin_right = 226.0
+margin_bottom = 384.0
+window_title = "DevTools"
+resizable = true
+script = ExtResource( 5 )
+
+[node name="Tabs" type="TabContainer" parent="UI/DevTools"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="SpawnThing" type="Tabs" parent="UI/DevTools/Tabs"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="Box" type="VBoxContainer" parent="UI/DevTools/Tabs/SpawnThing"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_min_size = Vector2( 128, 0 )
+size_flags_horizontal = 3
+
+[node name="Tree" type="Tree" parent="UI/DevTools/Tabs/SpawnThing/Box"]
+margin_right = 186.0
+margin_bottom = 228.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="UI/DevTools/Tabs/SpawnThing/Box"]
+margin_top = 232.0
+margin_right = 186.0
+margin_bottom = 252.0
+
+[connection signal="game_time_changed" from="." to="UI" method="_on_Dungeon_game_time_changed"]
+[connection signal="pressed" from="UI/Bottom/Box/Right/DevTools" to="UI" method="_on_DevTools_pressed"]

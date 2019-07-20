@@ -2,7 +2,9 @@
 
 [ext_resource path="res://thing/Thing.gd" type="Script" id=1]
 
-[node name="Thing" type="Sprite"]
+[node name="Thing" type="Sprite" groups=[
+"things",
+]]
 z_as_relative = false
 centered = false
 script = ExtResource( 1 )

@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://global/DATABASE.gd" type="Script" id=1]
 [ext_resource path="res://thing/Thing.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/gfx/player/base/halfling_male.png" type="Texture" id=3]
 [ext_resource path="res://thing/comp/Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://assets/gfx/items/apple.png" type="Texture" id=5]
+[ext_resource path="res://thing/comp/Item.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/gfx/tiles/stone_stairs_down.png" type="Texture" id=7]
 
 [node name="DATABASE" type="Node"]
 script = ExtResource( 1 )
@@ -32,4 +34,14 @@ z_index = 1
 texture = ExtResource( 5 )
 Name = "Apple"
 object_layer = 1
+
+[node name="Item" parent="Item/Apple" instance=ExtResource( 6 )]
+weight = 0.25
+value = 5
+
+[node name="DownStairs" parent="." instance=ExtResource( 2 )]
+position = Vector2( 93, 0 )
+texture = ExtResource( 7 )
+Name = "Stairway Leading Down"
+flags = 4
 
