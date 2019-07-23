@@ -9,7 +9,11 @@ export(int) var value = 0
 
 
 
+func pickup():
+	pass
 
+func drop():
+	pass
 
 
 func _ready():
@@ -17,6 +21,6 @@ func _ready():
 		get_parent().comp["item"] = self
 		P = get_parent()
 		P.add_to_group( "items" )
-		print("subscribed item to "+P.name)
+		print("subscribed item to "+P.Name)
 
 

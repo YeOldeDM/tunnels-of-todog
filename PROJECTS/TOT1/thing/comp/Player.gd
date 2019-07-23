@@ -46,7 +46,9 @@ func _input(event)->void:
 		if event.is_action("action_wait"):
 			emit_signal("player_acted", HERO.ACTION.WAIT)
 			MSG.send_message( "You wait for a short time" )
-
+		
+		if event.is_action("action_grab"):
+			emit_signal("player_acted", HERO.ACTION.GRAB)
 
 
 

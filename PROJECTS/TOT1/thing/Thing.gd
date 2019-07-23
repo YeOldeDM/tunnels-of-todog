@@ -81,7 +81,14 @@ export( int, "decal", "item", "entity" ) var object_layer #setget _set_object_la
 
 
 
-
+func get_context_name()->String:
+	if has_flag( FLAGS.UNIQUE ):
+		return Name
+	var pre:String = "A"
+	if Name[0].to_lower() in ['a','e','i','o','u']:
+		pre = "An"
+		
+	return pre+" "+Name
 
 
 # Spoooky code! I hope it works:P

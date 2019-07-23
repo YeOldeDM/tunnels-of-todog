@@ -2,7 +2,8 @@ extends Node
 
 enum ACTION {
 	WAIT,
-	MOVE
+	MOVE,
+	GRAB
 }
 
 var WAIT_TIME = 10	#how many seconds to Wait

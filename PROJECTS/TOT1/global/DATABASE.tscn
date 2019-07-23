@@ -46,4 +46,3 @@ position = Vector2( 93, 0 )
 texture = ExtResource( 7 )
 Name = "Stairway Leading Down"
 flags = 4
-
