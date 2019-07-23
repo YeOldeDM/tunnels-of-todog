@@ -10,6 +10,7 @@ func _ready():
 		get_parent().comp["player"] = self
 		P = get_parent()
 		
+		P.add_to_group( "player" )
 		P.visible = true
 		P.discovered = true
 

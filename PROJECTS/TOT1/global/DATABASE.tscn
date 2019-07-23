@@ -39,6 +39,8 @@ object_layer = 1
 weight = 0.25
 value = 5
 
+[node name="Edible" type="Node" parent="Item/Apple"]
+
 [node name="DownStairs" parent="." instance=ExtResource( 2 )]
 position = Vector2( 93, 0 )
 texture = ExtResource( 7 )

@@ -16,18 +16,24 @@ var seen_cells = PoolVector2Array()
 
 	# PUBLIC FUNCS #
 
-
-func create_thing( database_path )->Node:
+# Creates an instance of a Thing from the DATABASE
+# Use with spawn_thing() to place it in the dungeon
+func create_thing( database_path:String )->Node:
 	var new_thing: Node = DATABASE.grab( database_path )
 	things.append( new_thing )
 	return new_thing
 
-func destroy_thing( thing ):
+func destroy_thing( thing:Node )->void:
 	things.remove( things.find( thing ) )
 	thing.queue_free()
 
 
-
+# Puts a thing made with create_thing() into the dungeon at a position
+func spawn_thing( thing:Node, at_pos:Vector2 )->void:
+	map.add_child( thing )
+	thing.cell = at_pos
+	
+	
 
 func spawn_player( at_pos:Vector2 = Vector2() )->Node:
 	
@@ -72,7 +78,7 @@ func _ready():
 	
 	
 	# Create test Things
-	var ap = create_thing("Item/Apple")
+	var ap = create_thing("Apple")
 	map.add_child(ap)
 	ap.cell = p.cell
 	
@@ -89,21 +95,22 @@ func _ready():
 func _on_player_acted( action_idx ):
 	match action_idx:
 		HERO.ACTION.MOVE:
-			pass
+			pass # movement ticks are handled by _on_player_stepped()?
 		HERO.ACTION.WAIT:
 			_tick( HERO.WAIT_TIME )
 
 func _on_player_stepped( to_cell ):
 	seen_cells = FOV.calculate_fov( RPG.MAP_DATA.map, 1, to_cell, 5 )
-	for c in seen_cells:
+	for c in seen_cells: # Remove fog from seen cells
 		fog.set_cellv( c, -1 )
-		explored_cells.append( c )
-	for c in explored_cells:
+		if not c in explored_cells: # prevent duplicate cells
+			explored_cells.append( c )
+	for c in explored_cells: # Grey out all explored cells that are unseen
 		if not c in seen_cells:
 			fog.set_cellv( c, 1 )
 	
 	for thing in get_tree().get_nodes_in_group("things"):
-		thing.seen = thing.cell in seen_cells
+		thing.seen = thing.cell in seen_cells 
 	
 	_tick( HERO.MOVE_SPEED )
 	
@@ -112,3 +119,23 @@ func _on_player_stepped( to_cell ):
 	
 	
 
+
+
+func _on_DevConsole_command( parsed_text ):
+	var cmd = parsed_text[0]
+	match cmd:
+		"spawn":
+			var p = get_tree().get_nodes_in_group("player")[0]
+			var t = parsed_text[1]
+			var x = int( parsed_text[2] )
+			var y = int( parsed_text[3] )
+			var thing = create_thing( t )
+			spawn_thing( thing, p.cell + Vector2(x,y) )
+			
+			
+			
+			
+			
+			
+			
+			

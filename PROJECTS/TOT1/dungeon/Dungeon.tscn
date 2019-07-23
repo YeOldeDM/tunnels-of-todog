@@ -1,10 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://dungeon/Dungeon.gd" type="Script" id=1]
 [ext_resource path="res://dungeon/Dungeon.tres" type="TileSet" id=2]
 [ext_resource path="res://assets/gfx/tiles/vis_tiles.png" type="Texture" id=3]
 [ext_resource path="res://dungeon/UI.gd" type="Script" id=4]
-[ext_resource path="res://dungeon/DevTools.gd" type="Script" id=5]
+[ext_resource path="res://dungeon/DevConsole.gd" type="Script" id=5]
 
 [sub_resource type="TileSet" id=1]
 0/name = "vis_tiles.png 0"
@@ -40,7 +40,23 @@
 1/shapes = [  ]
 1/z_index = 0
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="Animation" id=2]
+resource_name = "Slide"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rect_position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -96 ), Vector2( 0, 64 ) ]
+}
+
+[sub_resource type="StyleBoxFlat" id=3]
 content_margin_left = 8.0
 content_margin_right = 8.0
 content_margin_top = 4.0
@@ -68,11 +84,44 @@ format = 1
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource( 4 )
 
+[node name="DevConsole" type="PanelContainer" parent="UI"]
+editor/display_folded = true
+margin_top = -96.0
+margin_right = 448.0
+margin_bottom = 64.0
+script = ExtResource( 5 )
+
+[node name="Box" type="VBoxContainer" parent="UI/DevConsole"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 441.0
+margin_bottom = 153.0
+
+[node name="Output" type="RichTextLabel" parent="UI/DevConsole/Box"]
+margin_right = 434.0
+margin_bottom = 118.0
+size_flags_vertical = 3
+bbcode_enabled = true
+scroll_following = true
+
+[node name="Input" type="LineEdit" parent="UI/DevConsole/Box"]
+margin_top = 122.0
+margin_right = 434.0
+margin_bottom = 146.0
+focus_mode = 1
+editable = false
+focus_mode = 1
+context_menu_enabled = false
+caret_blink = true
+
+[node name="Slider" type="AnimationPlayer" parent="UI/DevConsole"]
+anims/Slide = SubResource( 2 )
+
 [node name="Top" type="PanelContainer" parent="UI"]
 editor/display_folded = true
 margin_right = 800.0
 margin_bottom = 64.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 
 [node name="Box" type="HBoxContainer" parent="UI/Top"]
 margin_left = 8.0
@@ -117,10 +166,11 @@ align = 2
 valign = 1
 
 [node name="Bottom" type="PanelContainer" parent="UI"]
+editor/display_folded = true
 margin_top = 480.0
 margin_right = 800.0
 margin_bottom = 544.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 
 [node name="Box" type="HBoxContainer" parent="UI/Bottom"]
 margin_left = 8.0
@@ -276,49 +326,6 @@ margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="DevTools" type="Button" parent="UI/Bottom/Box/Right"]
-margin_right = 71.0
-margin_bottom = 20.0
-size_flags_horizontal = 0
-text = "DevTools"
-
-[node name="DevTools" type="WindowDialog" parent="UI"]
-margin_left = 32.0
-margin_top = 96.0
-margin_right = 226.0
-margin_bottom = 384.0
-window_title = "DevTools"
-resizable = true
-script = ExtResource( 5 )
-
-[node name="Tabs" type="TabContainer" parent="UI/DevTools"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-
-[node name="SpawnThing" type="Tabs" parent="UI/DevTools/Tabs"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-
-[node name="Box" type="VBoxContainer" parent="UI/DevTools/Tabs/SpawnThing"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_min_size = Vector2( 128, 0 )
-size_flags_horizontal = 3
-
-[node name="Tree" type="Tree" parent="UI/DevTools/Tabs/SpawnThing/Box"]
-margin_right = 186.0
-margin_bottom = 228.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Button" type="Button" parent="UI/DevTools/Tabs/SpawnThing/Box"]
-margin_top = 232.0
-margin_right = 186.0
-margin_bottom = 252.0
-
 [connection signal="game_time_changed" from="." to="UI" method="_on_Dungeon_game_time_changed"]
-[connection signal="pressed" from="UI/Bottom/Box/Right/DevTools" to="UI" method="_on_DevTools_pressed"]
+[connection signal="command" from="UI/DevConsole" to="." method="_on_DevConsole_command"]
+[connection signal="text_entered" from="UI/DevConsole/Box/Input" to="UI/DevConsole" method="_parse_input"]
