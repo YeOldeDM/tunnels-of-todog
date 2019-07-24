@@ -16,7 +16,7 @@ extends Node
 #  radius= distance in cells to cast to (only cells within radius are considered)
 
 func calculate_fov(dat, wall_index, origin, radius, blocked=[])->PoolVector2Array:
-	var data:PoolVector2Array = dat # Make a working copy of data
+	var data = dat.duplicate(true) # Make a working copy of data
 	for cell in blocked:
 		data[cell.x][cell.y] = wall_index
 	var rect:Rect2 = get_fov_rect(origin, radius)

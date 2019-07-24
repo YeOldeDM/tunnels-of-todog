@@ -5,6 +5,8 @@ signal player_acted(action_idx)
 
 var P
 
+var active = true
+
 func _ready():
 	if get_parent():
 		get_parent().comp["player"] = self
@@ -17,7 +19,7 @@ func _ready():
 
 
 func _input(event)->void:
-	if 'pressed' in event and event.pressed:
+	if RPG.player_active and 'pressed' in event and event.pressed:
 		if event.is_action("step_n"):
 			P.step( Vector2( 0, -1 ) )
 			emit_signal("player_acted",HERO.ACTION.MOVE)

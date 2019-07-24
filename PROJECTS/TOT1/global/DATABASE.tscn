@@ -1,12 +1,14 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://global/DATABASE.gd" type="Script" id=1]
 [ext_resource path="res://thing/Thing.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/gfx/player/base/halfling_male.png" type="Texture" id=3]
 [ext_resource path="res://thing/comp/Player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/gfx/items/apple.png" type="Texture" id=5]
-[ext_resource path="res://thing/comp/Item.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/gfx/tiles/stone_stairs_down.png" type="Texture" id=7]
+[ext_resource path="res://thing/comp/Fighter.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/gfx/items/apple.png" type="Texture" id=6]
+[ext_resource path="res://thing/comp/Item.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/gfx/tiles/stone_stairs_down.png" type="Texture" id=8]
+[ext_resource path="res://assets/gfx/monster/orc_new.png" type="Texture" id=9]
 
 [node name="DATABASE" type="Node"]
 script = ExtResource( 1 )
@@ -15,7 +17,8 @@ script = ExtResource( 1 )
 z_index = 2
 texture = ExtResource( 3 )
 Name = "Gloo"
-flags = 5
+blocks_movement = true
+unique = true
 object_layer = 2
 
 [node name="Player" parent="Player" instance=ExtResource( 4 )]
@@ -26,16 +29,18 @@ current = true
 drag_margin_h_enabled = false
 drag_margin_v_enabled = false
 
+[node name="Fighter" parent="Player" instance=ExtResource( 5 )]
+
 [node name="Item" type="Node2D" parent="."]
 
 [node name="Apple" parent="Item" instance=ExtResource( 2 )]
 position = Vector2( 1.13776, 98.8671 )
 z_index = 1
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 Name = "Apple"
 object_layer = 1
 
-[node name="Item" parent="Item/Apple" instance=ExtResource( 6 )]
+[node name="Item" parent="Item/Apple" instance=ExtResource( 7 )]
 weight = 0.25
 value = 5
 
@@ -43,6 +48,16 @@ value = 5
 
 [node name="DownStairs" parent="." instance=ExtResource( 2 )]
 position = Vector2( 93, 0 )
-texture = ExtResource( 7 )
+texture = ExtResource( 8 )
 Name = "Stairway Leading Down"
-flags = 4
+always_visible = true
+
+[node name="Orc" parent="." instance=ExtResource( 2 )]
+position = Vector2( 100, 81.0528 )
+texture = ExtResource( 9 )
+Name = "Orc"
+blocks_movement = true
+blocks_sight = true
+object_layer = 2
+
+[node name="Fighter" parent="Orc" instance=ExtResource( 5 )]

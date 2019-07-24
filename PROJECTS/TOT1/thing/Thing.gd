@@ -16,37 +16,11 @@ is an instance of me.
 
 
 
-# PROPERTY FLAG ENUMS
-#
-# To add a new property:
-#	1; add it to this list, double its value from the previous (8,16,32...)
-#	2; add a string option to var flags (line 66)
-enum FLAGS {
-	BLOCKS_MOVEMENT=1, #other Things can not normally enter this Thing's cell (monsters, closed doors, etc)
-	BLOCKS_SIGHT=2, # FOV counts this Thing's cell as a sight-blocking object (closed doors, fat monster, etc)
-	ALWAYS_VISIBLE=4, # A Thing that remains visible even when outside FOV (discovered Items, Stairs, etc)
-	UNIQUE=8, # A Thing that has a unique name (the Player, unique monsters/items)
-	# Un-Unique Things will show "A Goblin" "A Broadsword" "An Umbral Fiend"
-	# Unique Things will show "Vlad The Imaler" "Excalibur" "Todog The Grindy"
-}
-
-
-
-
-
-
-
-
 # Thing Components. Component nodes
 # who are children of this Thing will
 # subscribe themselves to this dict.
 var comp:Dictionary
 
-
-
-# Map Icon node representing this 
-# Thing may or may not exist
-#var icon = null
 
 
 
@@ -63,18 +37,21 @@ var seen:bool = false setget _set_seen
 # until discovered
 var discovered:bool = false
 
+
+# does the Thing currently live on the map?
+# False if not spawned yet, is in inventory, etc
+var on_map = false 
+
 # This things Name as it appears in its descriptive text
 # "A Thing"
 export( String ) var Name
 
-# This thing's Property Flags
-# Property descriptions are found at FLAGS enum ^ ^ ^
-export( int, FLAGS, \
-	"blocks movement", \
-	"blocks sight", \
-	"always visible", \
-	"unique" \
-		 ) var flags
+
+
+export(bool) var blocks_movement
+export(bool) var blocks_sight
+export(bool) var always_visible
+export(bool) var unique
 
 export( int, "decal", "item", "entity" ) var object_layer #setget _set_object_layer
 
@@ -82,7 +59,7 @@ export( int, "decal", "item", "entity" ) var object_layer #setget _set_object_la
 
 
 func get_context_name()->String:
-	if has_flag( FLAGS.UNIQUE ):
+	if unique:
 		return Name
 	var pre:String = "A"
 	if Name[0].to_lower() in ['a','e','i','o','u']:
@@ -93,11 +70,8 @@ func get_context_name()->String:
 
 # Spoooky code! I hope it works:P
 func is_seen()->bool:
-	return bool( abs( int( has_flag( FLAGS.ALWAYS_VISIBLE ) ) + int( seen ) ) )
-	
+	return bool( abs( int( always_visible ) + int( seen ) ) )
 
-func has_flag( F:int )->bool: #return the state of a property flag
-	return flags & F == F
 
 
 
@@ -118,15 +92,34 @@ func step( direction:Vector2 )->void:
 	direction.x = sign( direction.x )
 	direction.y = sign( direction.y )
 	
+	var target_cell = self.cell + direction
+	
+	# check for attack targets, if we are Fighter
+	var attack_target
+	if is_in_group( "fighters" ):
+		for thing in get_tree().get_nodes_in_group( "fighters" ):
+			if thing.cell == target_cell:
+				attack_target = thing
+	if attack_target:
+		comp["fighter"].deal_damage( attack_target.comp["fighter"] )
+		
+	
 	# just move the thing for now...
-	if can_step( cell + direction ):
-		self.cell += direction
-		emit_signal( "stepped", self.cell )
+	elif can_step( target_cell ):
+		self.cell = target_cell
+	emit_signal( "stepped", self.cell )
 
 
 
 func _ready()->void:
 	self.z_index = self.object_layer
+	
+	if blocks_movement:
+		add_to_group( "movement_blockers" )
+
+	if blocks_sight:
+		add_to_group( "sight_blockers" )
+
 
 
 

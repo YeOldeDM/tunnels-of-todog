@@ -9,6 +9,7 @@ var active:bool = false setget _set_active
 
 func _set_active( what:bool )->void:
 	active = what
+	RPG.player_active = !what
 	In.clear()
 	if active:
 		$Slider.play("Slide")

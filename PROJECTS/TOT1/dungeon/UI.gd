@@ -3,19 +3,22 @@ extends CanvasLayer
 onready var GameTimeLabel = $Top/Box/Info/GameTime
 onready var OutputBox = $Top/Box/Output
 
-onready var DevTools = $DevTools
+
 
 func _ready():
 	MSG.connect( "send_message", self, "_on_message_sent" )
 
 func _input( event ):
 	if event.is_action_pressed("show_inventory") and not $InvView.visible:
+		RPG.player_active = false
 		$InvView.show()
+		$InvView/Box/Contents.clear()
 		for thing in get_parent().inv.get_children():
 			$InvView/Box/Contents.append_bbcode( thing.get_context_name() )
 			$InvView/Box/Contents.newline()
 	if event.is_action_pressed("close_menu") and $InvView.visible:
-			$InvView.hide()
+		$InvView.hide()
+		RPG.player_active = true
 
 func _on_message_sent( txt, format ):
 	OutputBox.newline()
@@ -33,5 +36,4 @@ func _on_Dungeon_game_time_changed():
 						str(seconds).pad_zeros(2)
 
 
-func _on_DevTools_pressed():
-	DevTools.show()
+
