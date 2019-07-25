@@ -33,7 +33,13 @@ func destroy_thing( thing:Node )->void:
 #	things.remove( things.find( thing ) )
 	thing.queue_free()
 
-
+func get_things_at_cell( at_cell:Vector2 )->Array:
+	var result:Array = []
+	for thing in get_tree().get_nodes_in_group("things"):
+		if thing.on_map:
+			if thing.cell == at_cell:
+				result.append(thing)
+	return result
 
 func map_check_for_solid( cell:Vector2 )->bool:
 	var map_block:int = MAP_DATA.map[cell.x][cell.y]

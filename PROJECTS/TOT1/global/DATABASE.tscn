@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://global/DATABASE.gd" type="Script" id=1]
 [ext_resource path="res://thing/Thing.tscn" type="PackedScene" id=2]
@@ -9,11 +9,15 @@
 [ext_resource path="res://thing/comp/Item.tscn" type="PackedScene" id=7]
 [ext_resource path="res://assets/gfx/tiles/stone_stairs_down.png" type="Texture" id=8]
 [ext_resource path="res://assets/gfx/monster/orc_new.png" type="Texture" id=9]
+[ext_resource path="res://assets/gfx/dungeon/closed_door.png" type="Texture" id=10]
+[ext_resource path="res://thing/comp/Door.tscn" type="PackedScene" id=11]
+[ext_resource path="res://assets/gfx/dungeon/open_door.png" type="Texture" id=12]
 
 [node name="DATABASE" type="Node"]
 script = ExtResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
+editor/display_folded = true
 z_index = 2
 texture = ExtResource( 3 )
 Name = "Gloo"
@@ -31,20 +35,21 @@ drag_margin_v_enabled = false
 
 [node name="Fighter" parent="Player" instance=ExtResource( 5 )]
 
-[node name="Item" type="Node2D" parent="."]
+[node name="Items" type="Node" parent="."]
+editor/display_folded = true
 
-[node name="Apple" parent="Item" instance=ExtResource( 2 )]
+[node name="Apple" parent="Items" instance=ExtResource( 2 )]
 position = Vector2( 1.13776, 98.8671 )
 z_index = 1
 texture = ExtResource( 6 )
 Name = "Apple"
 object_layer = 1
 
-[node name="Item" parent="Item/Apple" instance=ExtResource( 7 )]
+[node name="Item" parent="Items/Apple" instance=ExtResource( 7 )]
 weight = 0.25
 value = 5
 
-[node name="Edible" type="Node" parent="Item/Apple"]
+[node name="Edible" type="Node" parent="Items/Apple"]
 
 [node name="DownStairs" parent="." instance=ExtResource( 2 )]
 position = Vector2( 93, 0 )
@@ -53,6 +58,7 @@ Name = "Stairway Leading Down"
 always_visible = true
 
 [node name="Orc" parent="." instance=ExtResource( 2 )]
+editor/display_folded = true
 position = Vector2( 100, 81.0528 )
 texture = ExtResource( 9 )
 Name = "Orc"
@@ -61,3 +67,17 @@ blocks_sight = true
 object_layer = 2
 
 [node name="Fighter" parent="Orc" instance=ExtResource( 5 )]
+
+[node name="Door" parent="." instance=ExtResource( 2 )]
+editor/display_folded = true
+position = Vector2( 1.05261, 160 )
+texture = ExtResource( 10 )
+Name = "Door"
+blocks_movement = true
+blocks_sight = true
+always_visible = true
+
+[node name="Door" parent="Door" instance=ExtResource( 11 )]
+closed_sprite = ExtResource( 10 )
+open_sprite = ExtResource( 12 )
+

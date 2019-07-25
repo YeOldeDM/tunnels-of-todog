@@ -48,8 +48,8 @@ export( String ) var Name
 
 
 
-export(bool) var blocks_movement
-export(bool) var blocks_sight
+export(bool) var blocks_movement setget _set_blocks_movement
+export(bool) var blocks_sight setget _set_blocks_sight
 export(bool) var always_visible
 export(bool) var unique
 
@@ -86,7 +86,7 @@ func can_step( cell:Vector2 )->bool:
 # Thing if its legal 
 func step( direction:Vector2 )->void:
 	# Vector input to this should have 
-	# axis values of -1/0/1
+	# axis values of -1|0|1
 	
 	# "Normalize" the axes
 	direction.x = sign( direction.x )
@@ -94,18 +94,31 @@ func step( direction:Vector2 )->void:
 	
 	var target_cell = self.cell + direction
 	
+	var things_at_cell = RPG.get_things_at_cell( target_cell )
+	
+	var will_step = true
+	if is_in_group("fighters"):
+		for thing in things_at_cell:
+			if thing.is_in_group( "doors" ):
+				if not thing.comp["door"].open:
+					thing.comp["door"].open = true
+					will_step = false
+			elif thing.is_in_group( "fighters" ):
+				comp["fighter"].deal_damage( thing.comp["fighter"] )
+				will_step = false
+	
 	# check for attack targets, if we are Fighter
-	var attack_target
-	if is_in_group( "fighters" ):
-		for thing in get_tree().get_nodes_in_group( "fighters" ):
-			if thing.cell == target_cell:
-				attack_target = thing
-	if attack_target:
-		comp["fighter"].deal_damage( attack_target.comp["fighter"] )
+#	var attack_target
+#	if is_in_group( "fighters" ):
+#		for thing in get_tree().get_nodes_in_group( "fighters" ):
+#			if thing.cell == target_cell:
+#				attack_target = thing
+#	if attack_target:
+#		comp["fighter"].deal_damage( attack_target.comp["fighter"] )
 		
 	
 	# just move the thing for now...
-	elif can_step( target_cell ):
+	if will_step and can_step( target_cell ):
 		self.cell = target_cell
 	emit_signal( "stepped", self.cell )
 
@@ -135,7 +148,19 @@ func _set_seen(what:bool)->void:
 	if seen and not discovered:
 		discovered = true
 
+func _set_blocks_movement( what ):
+	blocks_movement = what
+	if blocks_movement:
+		add_to_group("movement_blockers")
+	else:
+		remove_from_group("movement_blockers")
 
+func _set_blocks_sight( what ):
+	blocks_sight = what
+	if blocks_sight:
+		add_to_group("sight_blockers")
+	else:
+		remove_from_group("sight_blockers")
 
 
 	
